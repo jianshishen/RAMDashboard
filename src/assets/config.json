@@ -1,0 +1,11 @@
+{
+    "Server": "http://AU7490GRAD03",
+    "Port": ":52773",
+    "ServerList": "/v1/ram/servers",
+    "GroupServerList": "/v1/ram/groups",
+    "ServerStatusData": "/api/docdb/v1/ram/find/OperServers",
+    "AlertData": "/api/docdb/v1/ram/find/Alerts",
+    "GroupModificationPrefix": "/v1/ram/group",
+    "DeleteAlertPrefix": "/api/docdb/v1/ram/doc/Alerts/",
+    "PutAttributesPrefix": "/v1/ram/attributes/"
+}

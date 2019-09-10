@@ -1,0 +1,130 @@
+<div class="grid-container">
+    <mat-toolbar color="primary">
+        <button mat-icon-button matTooltip="Menu" (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>RAM Dashboard</span>
+        <span class="spacer"></span>
+        <mat-form-field>
+            <mat-label>Choose a date</mat-label>
+            <mat-select (selectionChange)="updateDate($event.value)" [(value)]="dateSelected">
+                <mat-option *ngFor="let date of data.Dates" [value]="date">
+                    {{date}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-icon-button matTooltip="Previous Data">
+            <mat-icon>navigate_before</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Next Data">
+            <mat-icon>navigate_next</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Refresh" (click)="ngOnInit()">
+            <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Build" (click)="openDialog()">
+            <mat-icon>build</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Yeah!" *ngIf="alertsNum===0;else showAlert">
+            <mat-icon>tag_faces</mat-icon>
+        </button>
+        <ng-template #showAlert>
+            <button mat-icon-button matTooltip="Warning" [matMenuTriggerFor]="menu">
+                <mat-icon [matBadge]="alertsNum" matBadgeColor="warn">warning</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item *ngFor="let alert of alerts | keyvalue" (click)="openAlert(alert.key)">
+                    <mat-icon>warning</mat-icon>
+                    <span>{{alert.value.Text}}</span>
+                </button>
+            </mat-menu>
+        </ng-template>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="sidenav-container">
+        <mat-sidenav #sidenav mode="over">
+            <mat-list>
+                <ng-container *ngFor="let group of groupList">
+                    <button mat-button (click)="sidenav.toggle()">{{group.GroupName}}</button>
+                    <mat-list style="margin-left:30px;">
+                        <div *ngFor="let server of group.OperationalServers">
+                            <button mat-button (click)="change(server);sidenav.toggle()">{{server}}</button>
+                        </div>
+                    </mat-list>
+                </ng-container>
+            </mat-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <mat-grid-list cols="2" rowHeight="230px">
+                <mat-grid-tile colspan="2" rowspan="1">
+                    <mat-card class="material-card">
+                        <mat-card-header>
+                            <mat-card-title>{{data.SystemId}}</mat-card-title>
+                            <mat-card-subtitle>
+                                ISC Version: {{data.CurrentDocument['ISCversion']}}
+                                <br />
+                                IP Address: {{data.CurrentDocument['IPAddress']}}
+                                <br />
+                                Uptime: {{data.CurrentDocument['SystemUpTime']}}
+                                <br />
+                                Group Name: {{data.CurrentDocument['GroupName']}}
+                                <br />
+                                CPU Count: {{data.CurrentDocument['CPUCount']}}
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content class="headline-card-content">
+                            <br />
+                            <br />
+                            <span>ThisSampleDateTime: {{data.CurrentDocument['ThisSampleDT']}}</span>
+                            <br />
+                            <span>PreviousSampleDateTime: {{data.CurrentDocument['PreviousSampleDT']}}</span>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1" rowspan="1">
+                    <mat-card class="material-card">
+                        <mat-card-header>
+                            <mat-card-title>Attributes</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <app-table [Attributes]="data.CurrentDocument['Attributes']"></app-table>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1" rowspan="2">
+                    <mat-card class="material-card">
+                        <mat-card-header>
+                            <mat-card-title>License Usage</mat-card-title>
+                            <mat-card-subtitle>
+                                LicenseTo: {{data.CurrentDocument['LicenseTo']}}
+                                <br />
+                                LicenseMaxHit: {{data.CurrentDocument['LicenseMaxHit']}}
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <app-licenseusage [LicenseLimit]="data.CurrentDocument['LicenseLimit']"
+                                [LicenseUsage]="data.CurrentDocument['LicenseUsage']"></app-licenseusage>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+
+                <mat-grid-tile colspan="1" rowspan="1">
+                    <mat-card class="material-card">
+                        <mat-card-header>
+                            <mat-card-title>RAM Count</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <app-ramcount [RAMCount]="data.CurrentDocument['RAMCount']">
+                            </app-ramcount>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+
+            </mat-grid-list>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+
+</div>

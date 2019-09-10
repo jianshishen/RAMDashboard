@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "tslint.jsEnable": true,
+    "editor.fontSize": 16
+}

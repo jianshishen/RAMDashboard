@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Alert</h2>
+<mat-dialog-content class="mat-typography">
+    <h3>To:</h3>
+    <p>{{alertData.alert.Destination}}</p>
+
+    <h3>Content:</h3>
+    <p>{{alertData.alert.Text}}</p>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="alertData.alertKey" cdkFocusInitial>Checked</button>
+</mat-dialog-actions>
