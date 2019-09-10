@@ -7,16 +7,16 @@
         <span class="spacer"></span>
         <mat-form-field>
             <mat-label>Choose a date</mat-label>
-            <mat-select (selectionChange)="updateDate($event.value)" [(value)]="dateSelected">
+            <mat-select (selectionChange)="updateDate($event.value)">
                 <mat-option *ngFor="let date of data.Dates" [value]="date">
                     {{date}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <button mat-icon-button matTooltip="Previous Data">
+        <button mat-icon-button matTooltip="Previous Data" (click)="updateDocument(true)">
             <mat-icon>navigate_before</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Next Data">
+        <button mat-icon-button matTooltip="Next Data" (click)="updateDocument(false)">
             <mat-icon>navigate_next</mat-icon>
         </button>
         <button mat-icon-button matTooltip="Refresh" (click)="ngOnInit()">

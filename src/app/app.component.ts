@@ -115,19 +115,18 @@ export class DialogAppComponent {
 })
 
 export class AppComponent implements OnInit {
-  data = { SystemId: '', CurrentDate: '', CurrentDocument: {}, Dates: [], Documents: {} };
+  data = { SystemId: '', CurrentDate: '', CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
   title = 'RAMDashboard';
 
   alerts = {};
   alertsNum: number;
-  dateSelected: string;
   serverList: string[];
   groupList: string[];
 
   constructor(private http: HttpClient, public dialog: MatDialog, public alert: MatDialog, private snackBar: MatSnackBar) { }
 
   change(nav: string): void {
-    this.data.SystemId = nav;
+    this.data = { SystemId: nav, CurrentDate: '', CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
     this.requestDocuments(this.data.SystemId);
   }
 
@@ -179,7 +178,7 @@ export class AppComponent implements OnInit {
 
   requestAlerts() {
     this.alerts = {};
-    return this.http.post(
+    this.http.post(
       config.Server + config.Port + config.AlertData, {}
     ).toPromise().then(res => {
       this.alertsNum = res[CONTENT][CONTENT].length;
@@ -196,7 +195,7 @@ export class AppComponent implements OnInit {
   }
 
   requestDocuments(SystemId: string) {
-    return this.http.post(
+    this.http.post(
       config.Server + config.Port + config.ServerStatusData, { restriction: ['SystemId', SystemId, '='] }
     ).toPromise().then(res => {
       res[CONTENT][CONTENT].reduce((_, doc) => {
@@ -205,12 +204,24 @@ export class AppComponent implements OnInit {
         this.data.Documents[JSON.parse(doc['%Doc'])[THISSAMPLEDT].split(' ')[0]].push(JSON.parse(doc['%Doc']));
       }, 0);
 
+      this.data.Dates = [];
       Object.keys(this.data.Documents).map((date) => { this.data.Dates.push(date); });
 
-      this.data.CurrentDocument = this.data.CurrentDate === '' ? JSON.parse(
-        res[CONTENT][CONTENT][res[CONTENT][CONTENT].length - 1]['%Doc']) : this.data.Documents[this.data.CurrentDate][-1];
-      this.data.CurrentDate = this.data.CurrentDate === '' && JSON.parse(
+      this.data.CurrentDate = JSON.parse(
         res[CONTENT][CONTENT][res[CONTENT][CONTENT].length - 1]['%Doc'])[THISSAMPLEDT].split(' ')[0];
+
+      this.data.CurrentIndex = this.data.Documents[this.data.CurrentDate].length - 1;
+
+      this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
+
+      // this.data.CurrentDate = this.data.CurrentDate === '' && JSON.parse(
+      //   res[CONTENT][CONTENT][res[CONTENT][CONTENT].length - 1]['%Doc'])[THISSAMPLEDT].split(' ')[0];
+
+      // this.data.CurrentIndex = this.data.CurrentIndex === -1 ?
+      //   this.data.Documents[this.data.CurrentDate].length - 1 :
+      //   this.data.CurrentIndex;
+
+      // this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
     });
   }
 
@@ -233,14 +244,37 @@ export class AppComponent implements OnInit {
 
   updateDate(date: string) {
     this.data.CurrentDate = date;
-    this.ngOnInit();
+    this.data.CurrentIndex = this.data.Documents[this.data.CurrentDate].length - 1;
+    this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
+  }
+
+  updateDocument(previous: boolean) {
+    if (previous) {
+      if (this.data.CurrentIndex > 0) {
+        this.data.CurrentIndex = this.data.CurrentIndex - 1;
+      } else {
+        this.snackBar.open('No Less!', 'GOT IT', {
+          duration: 5000,
+        });
+      }
+    } else {
+      if (this.data.CurrentIndex < this.data.Documents[this.data.CurrentDate].length - 1) {
+        this.data.CurrentIndex = this.data.CurrentIndex + 1;
+      } else {
+        this.snackBar.open('No More!', 'GOT IT', {
+          duration: 5000,
+        });
+      }
+    }
+    this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
   }
 
   async ngOnInit() {
     await this.requestServerList();
+    this.requestAlerts();
     this.requestGroupList();
-    await this.requestDocuments(this.data.SystemId);
-    await this.requestAlerts();
+    this.requestDocuments(this.data.SystemId);
+
     // setInterval(() => { this.serverList.push('a'); }, 1000);
   }
 }
