@@ -44,10 +44,11 @@
         <mat-sidenav #sidenav mode="over">
             <mat-list>
                 <ng-container *ngFor="let group of groupList">
-                    <button mat-button (click)="sidenav.toggle()">{{group.GroupName}}</button>
+                    <button mat-button (click)="serverView=false;sidenav.toggle()">{{group.GroupName}}</button>
                     <mat-list style="margin-left:30px;">
                         <div *ngFor="let server of group.OperationalServers">
-                            <button mat-button (click)="change(server);sidenav.toggle()">{{server}}</button>
+                            <button mat-button
+                                (click)="serverView=true;change(server);sidenav.toggle()">{{server}}</button>
                         </div>
                     </mat-list>
                 </ng-container>
@@ -55,7 +56,7 @@
         </mat-sidenav>
 
         <mat-sidenav-content>
-            <mat-grid-list cols="2" rowHeight="230px">
+            <mat-grid-list *ngIf="serverView;else groupView" cols="2" rowHeight="230px">
                 <mat-grid-tile colspan="2" rowspan="1">
                     <mat-card class="material-card">
                         <mat-card-header>
@@ -123,6 +124,22 @@
                 </mat-grid-tile>
 
             </mat-grid-list>
+            <ng-template #groupView>
+                <mat-grid-list cols="1" rowHeight="230px">
+                    <mat-grid-tile colspan="1" rowspan="1">
+                        Group View
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="1" rowspan="1">
+                        Group View
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="1" rowspan="1">
+                        Group View
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="1" rowspan="1">
+                        Group View
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </ng-template>
         </mat-sidenav-content>
     </mat-sidenav-container>
 

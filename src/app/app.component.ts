@@ -117,6 +117,7 @@ export class DialogAppComponent {
 export class AppComponent implements OnInit {
   data = { SystemId: '', CurrentDate: '', CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
   title = 'RAMDashboard';
+  serverView = true;
 
   alerts = {};
   alertsNum: number;
@@ -274,7 +275,5 @@ export class AppComponent implements OnInit {
     this.requestAlerts();
     this.requestGroupList();
     this.requestDocuments(this.data.SystemId);
-
-    // setInterval(() => { this.serverList.push('a'); }, 1000);
   }
 }
