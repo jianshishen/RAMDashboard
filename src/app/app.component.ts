@@ -116,6 +116,7 @@ export class DialogAppComponent {
 
 export class AppComponent implements OnInit {
   data = { SystemId: '', CurrentDate: '', CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
+  groupData = { GroupName: '' };
   title = 'RAMDashboard';
   serverView = true;
 
@@ -126,7 +127,11 @@ export class AppComponent implements OnInit {
 
   constructor(private http: HttpClient, public dialog: MatDialog, public alert: MatDialog, private snackBar: MatSnackBar) { }
 
-  change(nav: string): void {
+  changeGroup(groupName: string): void {
+    this.groupData.GroupName = groupName;
+  }
+
+  changeServer(nav: string): void {
     this.data = { SystemId: nav, CurrentDate: '', CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
     this.requestDocuments(this.data.SystemId);
   }
@@ -254,7 +259,7 @@ export class AppComponent implements OnInit {
       if (this.data.CurrentIndex > 0) {
         this.data.CurrentIndex = this.data.CurrentIndex - 1;
       } else {
-        this.snackBar.open('No Less!', 'GOT IT', {
+        this.snackBar.open('No More!', 'GOT IT', {
           duration: 5000,
         });
       }

@@ -5,7 +5,7 @@
         </button>
         <span>RAM Dashboard</span>
         <span class="spacer"></span>
-        <mat-form-field>
+        <mat-form-field matTooltip="Choose A Date">
             <mat-select (selectionChange)="updateDate($event.value)">
                 <mat-option *ngFor="let date of data.Dates" [value]="date">
                     {{date}}
@@ -44,11 +44,12 @@
         <mat-sidenav #sidenav mode="over">
             <mat-list>
                 <ng-container *ngFor="let group of groupList">
-                    <button mat-button (click)="serverView=false;sidenav.toggle()">{{group.GroupName}}</button>
+                    <button mat-button
+                        (click)="serverView=false;changeGroup(group.GroupName);sidenav.toggle()">{{group.GroupName}}</button>
                     <mat-list style="margin-left:30px;">
                         <div *ngFor="let server of group.OperationalServers">
                             <button mat-button
-                                (click)="serverView=true;change(server);sidenav.toggle()">{{server}}</button>
+                                (click)="serverView=true;changeServer(server);sidenav.toggle()">{{server}}</button>
                         </div>
                     </mat-list>
                 </ng-container>
@@ -125,19 +126,45 @@
 
             </mat-grid-list>
             <ng-template #groupView>
-                <mat-grid-list cols="1" rowHeight="230px">
-                    <mat-grid-tile colspan="1" rowspan="1">
-                        Group View
+                <mat-grid-list cols="2" rowHeight="230px">
+                    <mat-grid-tile colspan="2" rowspan="1">
+                        <mat-card class="material-card">
+                            <mat-card-header>
+                                <mat-card-title>{{groupData.GroupName}}</mat-card-title>
+                                <mat-card-subtitle>
+                                    Servers:
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content class="headline-card-content">
+
+                            </mat-card-content>
+                        </mat-card>
                     </mat-grid-tile>
+
                     <mat-grid-tile colspan="1" rowspan="1">
-                        Group View
+                        <mat-card class="material-card">
+                            <mat-card-header>
+                                <mat-card-title>License Usage</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                            </mat-card-content>
+                        </mat-card>
                     </mat-grid-tile>
+
                     <mat-grid-tile colspan="1" rowspan="1">
-                        Group View
+                        <mat-card class="material-card">
+                            <mat-card-header>
+                                <mat-card-title>System Uptime</mat-card-title>
+                                <mat-card-subtitle>
+
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+
+                            </mat-card-content>
+                        </mat-card>
                     </mat-grid-tile>
-                    <mat-grid-tile colspan="1" rowspan="1">
-                        Group View
-                    </mat-grid-tile>
+
                 </mat-grid-list>
             </ng-template>
         </mat-sidenav-content>
