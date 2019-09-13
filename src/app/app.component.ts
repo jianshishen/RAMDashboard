@@ -220,14 +220,6 @@ export class AppComponent implements OnInit {
 
       this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
 
-      // this.data.CurrentDate = this.data.CurrentDate === '' && JSON.parse(
-      //   res[CONTENT][CONTENT][res[CONTENT][CONTENT].length - 1]['%Doc'])[THISSAMPLEDT].split(' ')[0];
-
-      // this.data.CurrentIndex = this.data.CurrentIndex === -1 ?
-      //   this.data.Documents[this.data.CurrentDate].length - 1 :
-      //   this.data.CurrentIndex;
-
-      // this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
     });
   }
 
