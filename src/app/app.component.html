@@ -18,9 +18,14 @@
         <button mat-icon-button matTooltip="Next Data" (click)="updateDocument(false)">
             <mat-icon>navigate_next</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Refresh" (click)="ngOnInit()">
+        <button mat-icon-button matTooltip="Refresh" *ngIf="serverView;else groupRefresh" (click)="ngOnInit()">
             <mat-icon>refresh</mat-icon>
         </button>
+        <ng-template #groupRefresh>
+            <button mat-icon-button matTooltip="Refresh" (click)="changeGroup(groupData.GroupName)">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </ng-template>
         <button mat-icon-button matTooltip="Build" (click)="openDialog()">
             <mat-icon>build</mat-icon>
         </button>
@@ -44,8 +49,11 @@
         <mat-sidenav #sidenav mode="over">
             <mat-list>
                 <ng-container *ngFor="let group of groupList">
-                    <button mat-button
+                    <button mat-button *ngIf="group.GroupName!=='UndeterminedGroup';else ug"
                         (click)="serverView=false;changeGroup(group.GroupName);sidenav.toggle()">{{group.GroupName}}</button>
+                    <ng-template #ug>
+                        <button mat-button>{{group.GroupName}}</button>
+                    </ng-template>
                     <mat-list style="margin-left:30px;">
                         <div *ngFor="let server of group.OperationalServers">
                             <button mat-button
@@ -57,8 +65,8 @@
         </mat-sidenav>
 
         <mat-sidenav-content>
-            <mat-grid-list *ngIf="serverView;else groupView" cols="2" rowHeight="230px">
-                <mat-grid-tile colspan="2" rowspan="1">
+            <mat-grid-list *ngIf="serverView;else groupView" cols="2" rowHeight="100px">
+                <mat-grid-tile colspan="2" rowspan="2">
                     <mat-card class="material-card">
                         <mat-card-header>
                             <mat-card-title>{{data.SystemId}}</mat-card-title>
@@ -75,8 +83,6 @@
                             </mat-card-subtitle>
                         </mat-card-header>
                         <mat-card-content class="headline-card-content">
-                            <br />
-                            <br />
                             <span>ThisSampleDateTime: {{data.CurrentDocument['ThisSampleDT']}}</span>
                             <br />
                             <span>PreviousSampleDateTime: {{data.CurrentDocument['PreviousSampleDT']}}</span>
@@ -84,7 +90,7 @@
                     </mat-card>
                 </mat-grid-tile>
 
-                <mat-grid-tile colspan="1" rowspan="1">
+                <mat-grid-tile colspan="1" rowspan="3">
                     <mat-card class="material-card">
                         <mat-card-header>
                             <mat-card-title>Attributes</mat-card-title>
@@ -95,7 +101,7 @@
                     </mat-card>
                 </mat-grid-tile>
 
-                <mat-grid-tile colspan="1" rowspan="2">
+                <mat-grid-tile colspan="1" rowspan="6">
                     <mat-card class="material-card">
                         <mat-card-header>
                             <mat-card-title>License Usage</mat-card-title>
@@ -112,7 +118,7 @@
                     </mat-card>
                 </mat-grid-tile>
 
-                <mat-grid-tile colspan="1" rowspan="1">
+                <mat-grid-tile colspan="1" rowspan="3">
                     <mat-card class="material-card">
                         <mat-card-header>
                             <mat-card-title>RAM Count</mat-card-title>
@@ -126,13 +132,13 @@
 
             </mat-grid-list>
             <ng-template #groupView>
-                <mat-grid-list cols="2" rowHeight="230px">
+                <mat-grid-list cols="2" rowHeight="100px">
                     <mat-grid-tile colspan="2" rowspan="1">
                         <mat-card class="material-card">
                             <mat-card-header>
                                 <mat-card-title>{{groupData.GroupName}}</mat-card-title>
                                 <mat-card-subtitle>
-                                    Servers:
+                                    Servers:{{groupData.Servers}}
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content class="headline-card-content">
@@ -141,26 +147,28 @@
                         </mat-card>
                     </mat-grid-tile>
 
-                    <mat-grid-tile colspan="1" rowspan="1">
+                    <mat-grid-tile colspan="1" rowspan="4">
                         <mat-card class="material-card">
                             <mat-card-header>
                                 <mat-card-title>License Usage</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
+                                <app-grouplicenseusage [GroupName]=groupData.GroupName [Documents]=data.Documents
+                                    [Date]=data.CurrentDate>
+                                </app-grouplicenseusage>
                             </mat-card-content>
                         </mat-card>
                     </mat-grid-tile>
 
-                    <mat-grid-tile colspan="1" rowspan="1">
+                    <mat-grid-tile colspan="1" rowspan="4">
                         <mat-card class="material-card">
                             <mat-card-header>
                                 <mat-card-title>System Uptime</mat-card-title>
-                                <mat-card-subtitle>
-
-                                </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-
+                                <app-groupsystemuptime [GroupName]=groupData.GroupName [Documents]=data.Documents
+                                    [Date]=data.CurrentDate>
+                                </app-groupsystemuptime>
                             </mat-card-content>
                         </mat-card>
                     </mat-grid-tile>

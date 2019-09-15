@@ -45,14 +45,14 @@ export class LicenseusageComponent implements OnChanges {
       type: 'doughnut',
 
       // The data for our dataset
-      data: this.data,
+      data: this.data
 
       // Configuration options go here
-      options: {
-        // maintainAspectRatio: false,
-        // rotation: 1 * Math.PI,
-        // circumference: 1 * Math.PI
-      }
+      // options: {
+      // maintainAspectRatio: false,
+      // rotation: 1 * Math.PI,
+      // circumference: 1 * Math.PI
+      // }
     });
   }
 

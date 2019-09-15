@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 const CONTENT = 'content';
 const GROUPNAME = 'GroupName';
+const OPERATIONALSERVERS = 'OperationalServers';
 const THISSAMPLEDT = 'ThisSampleDT';
 const ATTRIBUTELIST: string[] = [
   'zsys.RAM.Attribute.ISCversion', 'zsys.RAM.Attribute.ISCInstanceName', 'zsys.RAM.Attribute.CPUCount',
@@ -116,7 +117,7 @@ export class DialogAppComponent {
 
 export class AppComponent implements OnInit {
   data = { SystemId: '', CurrentDate: '', CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
-  groupData = { GroupName: '' };
+  groupData = { GroupName: '', Servers: '' };
   title = 'RAMDashboard';
   serverView = true;
 
@@ -129,6 +130,9 @@ export class AppComponent implements OnInit {
 
   changeGroup(groupName: string): void {
     this.groupData.GroupName = groupName;
+    this.groupData.Servers = this.groupList.filter(group => group[GROUPNAME] === groupName)[0][OPERATIONALSERVERS].join() === '' ?
+      'None' :
+      this.groupList.filter(group => group[GROUPNAME] === groupName)[0][OPERATIONALSERVERS].join();
   }
 
   changeServer(nav: string): void {
@@ -219,7 +223,6 @@ export class AppComponent implements OnInit {
       this.data.CurrentIndex = this.data.Documents[this.data.CurrentDate].length - 1;
 
       this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
-
     });
   }
 

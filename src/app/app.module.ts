@@ -9,6 +9,8 @@ import { MaterialModule } from './material-module';
 import { RamcountComponent } from './components/ramcount/ramcount.component';
 import { LicenseusageComponent } from './components/licenseusage/licenseusage.component';
 import { TableComponent } from './components/table/table.component';
+import { GrouplicenseusageComponent } from './components/grouplicenseusage/grouplicenseusage.component';
+import { GroupsystemuptimeComponent } from './components/groupsystemuptime/groupsystemuptime.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { TableComponent } from './components/table/table.component';
     LicenseusageComponent,
     TableComponent,
     DialogAppComponent,
-    AlertAppComponent
+    AlertAppComponent,
+    GrouplicenseusageComponent,
+    GroupsystemuptimeComponent
   ],
   imports: [
     BrowserModule,
