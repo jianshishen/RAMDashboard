@@ -57,7 +57,7 @@
                     <mat-list style="margin-left:30px;">
                         <div *ngFor="let server of group.OperationalServers">
                             <button mat-button
-                                (click)="serverView=true;changeServer(server);sidenav.toggle()">{{server}}</button>
+                                (click)="serverView=true;requestDocuments(server);sidenav.toggle()">{{server}}</button>
                         </div>
                     </mat-list>
                 </ng-container>

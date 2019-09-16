@@ -128,17 +128,17 @@ export class AppComponent implements OnInit {
 
   constructor(private http: HttpClient, public dialog: MatDialog, public alert: MatDialog, private snackBar: MatSnackBar) { }
 
-  changeGroup(groupName: string): void {
+  async changeGroup(groupName: string) {
     this.groupData.GroupName = groupName;
     this.groupData.Servers = this.groupList.filter(group => group[GROUPNAME] === groupName)[0][OPERATIONALSERVERS].join() === '' ?
       'None' :
       this.groupList.filter(group => group[GROUPNAME] === groupName)[0][OPERATIONALSERVERS].join();
+    await this.requestDocuments();
   }
 
-  changeServer(nav: string): void {
-    this.data = { SystemId: nav, CurrentDate: '', CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
-    this.requestDocuments(this.data.SystemId);
-  }
+  // async changeServer(nav: string) {
+  //   await this.requestDocuments(nav);
+  // }
 
   openAlert(key: number): void {
 
@@ -204,16 +204,16 @@ export class AppComponent implements OnInit {
     }
   }
 
-  requestDocuments(SystemId: string) {
-    this.http.post(
-      config.Server + config.Port + config.ServerStatusData, { restriction: ['SystemId', SystemId, '='] }
+  requestDocuments(SystemId: string = 'all') {
+    this.data = { SystemId, CurrentDate: this.data.CurrentDate, CurrentDocument: {}, CurrentIndex: -1, Dates: [], Documents: {} };
+    return this.http.post(
+      config.Server + config.Port + config.ServerStatusData, { restriction: SystemId === 'all' ? '' : ['SystemId', SystemId, '='] }
     ).toPromise().then(res => {
       res[CONTENT][CONTENT].reduce((_, doc) => {
         this.data.Documents[JSON.parse(doc['%Doc'])[THISSAMPLEDT].split(' ')[0]] =
           this.data.Documents[JSON.parse(doc['%Doc'])[THISSAMPLEDT].split(' ')[0]] || [];
         this.data.Documents[JSON.parse(doc['%Doc'])[THISSAMPLEDT].split(' ')[0]].push(JSON.parse(doc['%Doc']));
       }, 0);
-
       this.data.Dates = [];
       Object.keys(this.data.Documents).map((date) => { this.data.Dates.push(date); });
 
@@ -274,6 +274,6 @@ export class AppComponent implements OnInit {
     await this.requestServerList();
     this.requestAlerts();
     this.requestGroupList();
-    this.requestDocuments(this.data.SystemId);
+    await this.requestDocuments(this.data.SystemId);
   }
 }

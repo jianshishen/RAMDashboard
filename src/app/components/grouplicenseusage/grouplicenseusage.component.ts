@@ -15,6 +15,7 @@ export class GrouplicenseusageComponent implements OnInit, OnChanges {
   @Input() Date;
 
   generateDisplayData() {
+    if (this.GroupName === '' || Object.keys(this.Documents).length === 0 || this.Date === '') { return; }
     this.displayData = [];
     this.Documents[this.Date].filter(doc => doc['GroupName'] === this.GroupName).map(doc => {
       if (doc['LicenseUsage'] !== undefined) {
@@ -73,21 +74,22 @@ export class GrouplicenseusageComponent implements OnInit, OnChanges {
               labelString: 'License Usage'
             }
           }]
+        },
+        tooltips: {
+          enabled: false
+          // intersect: false,
+          // mode: 'index',
+          // callbacks: {
+          //   label: (tooltipItem, myData) => {
+          //     let label = myData.datasets[tooltipItem.datasetIndex].label || '';
+          //     if (label) {
+          //       label += ': ';
+          //     }
+          //     label += parseFloat(tooltipItem.value).toFixed(2);
+          //     return label;
+          //   }
+          // }
         }
-        // tooltips: {
-        //   intersect: false,
-        //   mode: 'index',
-        //   callbacks: {
-        //     label: (tooltipItem, myData) => {
-        //       let label = myData.datasets[tooltipItem.datasetIndex].label || '';
-        //       if (label) {
-        //         label += ': ';
-        //       }
-        //       label += parseFloat(tooltipItem.value).toFixed(2);
-        //       return label;
-        //     }
-        //   }
-        // }
       }
     };
     const chart = new Chart(ctx, cfg);
