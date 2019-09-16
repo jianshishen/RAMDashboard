@@ -83,28 +83,47 @@ export class DialogAppComponent {
           'Content-Type': 'application/json'
         })
       }
-    ).toPromise();
-    this.snackBar.open('Done', 'GOT IT', {
-      duration: 5000,
-    });
+    ).toPromise()
+      .then(() => {
+        this.snackBar.open('Done', 'GOT IT', {
+          duration: 5000,
+        });
+      }, err => {
+        this.snackBar.open(err.error, 'GOT IT', {
+          duration: 5000,
+        });
+      });
+
   }
 
   putServerIntoGroup() {
     this.http.put(config.Server + config.Port + config.GroupModificationPrefix + '/' +
-      this.putGroupGroupSelected + '/' + this.putGroupServerSelected, {}).toPromise();
-    this.snackBar.open('Done', 'GOT IT', {
-      duration: 5000,
-    });
+      this.putGroupGroupSelected + '/' + this.putGroupServerSelected, {}).toPromise()
+      .then(() => {
+        this.snackBar.open('Done', 'GOT IT', {
+          duration: 5000,
+        });
+      }, err => {
+        this.snackBar.open(err.error, 'GOT IT', {
+          duration: 5000,
+        });
+      });
   }
 
   removeServerFromGroup() {
     this.http.delete(
       config.Server + config.Port + config.GroupModificationPrefix + '/' +
       this.removeGroupGroupSelected + '/' + this.removeGroupServerSelected, {}
-    ).toPromise();
-    this.snackBar.open('Done', 'GOT IT', {
-      duration: 5000,
-    });
+    ).toPromise()
+      .then(() => {
+        this.snackBar.open('Done', 'GOT IT', {
+          duration: 5000,
+        });
+      }, err => {
+        this.snackBar.open(err.error, 'GOT IT', {
+          duration: 5000,
+        });
+      });
   }
 
 }
@@ -136,10 +155,6 @@ export class AppComponent implements OnInit {
     await this.requestDocuments();
   }
 
-  // async changeServer(nav: string) {
-  //   await this.requestDocuments(nav);
-  // }
-
   openAlert(key: number): void {
 
     const alertRef = this.alert.open(AlertAppComponent,
@@ -156,6 +171,10 @@ export class AppComponent implements OnInit {
             duration: 5000,
           });
           this.requestAlerts();
+        }, err => {
+          this.snackBar.open(err.error, 'GOT IT', {
+            duration: 5000,
+          });
         });
       }
     });
@@ -179,10 +198,6 @@ export class AppComponent implements OnInit {
       } else {
         this.requestChangingAttributes(result, false);
       }
-      this.snackBar.open('Done', 'GOT IT', {
-        duration: 5000,
-      });
-
     });
   }
 
@@ -193,14 +208,37 @@ export class AppComponent implements OnInit {
     ).toPromise().then(res => {
       this.alertsNum = res[CONTENT][CONTENT].length;
       res[CONTENT][CONTENT].reduce((_, alert) => { this.alerts[alert['%DocumentId']] = JSON.parse(alert['%Doc']); }, 0);
+    }, err => {
+      this.snackBar.open(err.error, 'GOT IT', {
+        duration: 5000,
+      });
     });
   }
 
   requestChangingAttributes(result: string[], def: boolean) {
     if (def) {
-      this.http.get(config.Server + config.Port + config.PutAttributesPrefix + this.data.SystemId, {}).toPromise();
+      this.http.get(config.Server + config.Port + config.PutAttributesPrefix + this.data.SystemId, {}).toPromise()
+        .then(() => {
+          this.snackBar.open('Done', 'GOT IT', {
+            duration: 5000,
+          });
+        }, err => {
+          this.snackBar.open(err.error, 'GOT IT', {
+            duration: 5000,
+          });
+        });
     } else {
-      this.http.put(config.Server + config.Port + config.PutAttributesPrefix + this.data.SystemId + '/' + result.join(), {}).toPromise();
+      this.http.put(config.Server + config.Port + config.PutAttributesPrefix + this.data.SystemId + '/' + result.join(), {}).toPromise()
+        .then(() => {
+          this.snackBar.open('Done', 'GOT IT', {
+            duration: 5000,
+          });
+        }, err => {
+          this.snackBar.open(err.error, 'GOT IT', {
+            duration: 5000,
+          });
+        }
+        );
     }
   }
 
@@ -223,7 +261,12 @@ export class AppComponent implements OnInit {
       this.data.CurrentIndex = this.data.Documents[this.data.CurrentDate].length - 1;
 
       this.data.CurrentDocument = this.data.Documents[this.data.CurrentDate][this.data.CurrentIndex];
-    });
+    }, err => {
+      this.snackBar.open(err.error, 'GOT IT', {
+        duration: 5000,
+      });
+    }
+    );
   }
 
   requestServerList() {
@@ -232,6 +275,10 @@ export class AppComponent implements OnInit {
     ).toPromise().then((res: string[]) => {
       this.serverList = res;
       this.data.SystemId = res.length === 0 ? '' : res[0];
+    }, err => {
+      this.snackBar.open(err.error, 'GOT IT', {
+        duration: 5000,
+      });
     });
   }
 
@@ -240,6 +287,10 @@ export class AppComponent implements OnInit {
       config.Server + config.Port + config.GroupServerList
     ).toPromise().then((res: string[]) => {
       this.groupList = res;
+    }, err => {
+      this.snackBar.open(err.error, 'GOT IT', {
+        duration: 5000,
+      });
     });
   }
 
