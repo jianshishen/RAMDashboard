@@ -2,6 +2,27 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.0.
 
+## Info
+
+An Angular dashboard for Remote Activity Monitor.
+
+## Deployment
+
+1. Install Angular-cli.
+   `npm i angular-cli -g`
+
+2. Go to the project directory.
+
+3. Install the required modules.
+   `npm install`
+
+4. Run the server.
+   `ng serve`
+
+5. Navigate to `http://localhost:4200/`
+
+   Tested on Google Chrome
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
