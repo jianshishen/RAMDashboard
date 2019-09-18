@@ -16,7 +16,7 @@ An Angular dashboard for Remote Activity Monitor.
 3. Install the required modules.
    `npm install`
 
-4. Config API URL in `/src/assets/config.json`.
+4. Config backend hostname and port in `/src/assets/config.json`.
 
 5. Run the server.
    `ng serve`
